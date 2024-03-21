@@ -1,0 +1,100 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and task definitions.
+.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# If you're using packages in your project, consider excluding them here:
+# /packages/
+
+# If you're using Flutter plugins, exclude the platform specific pod dependency:
+# ios/Pods/
+
+# Web related
+lib/generated_plugin_registrant.dart
+
+# Symbolication artifacts (Flutter >= 1.20.0)
+app.*.symbols
+app.*.json
+
+# Android related
+**/android/**/*.gradle
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+
+# Android Studio will place build artifacts here if the gradle files are
+# imported from Flutter.
+**/android/.idea
+gradle-wrapper.jar
+
+# Android Studio Patch files
+*.patch
+
+# iOS/Xcode related
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*_history
+**/ios/.symlinks/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/GeneratedPluginRegistrant.*
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/.generated/
+**/ios/.gradle
+**/ios/Runner.xcodeproj/project.xcworkspace/xcuserdata/
+**/ios/Runner.xcodeproj/xcuserdata/
+
+# macOS related
+**/macos/Flutter/ephemeral/
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/flutter_export_environment.sh
+**/macos/Flutter/Flutter-Generated.xcconfig
+**/macos/Pods/
+**/macos/.symlinks/
+**/macos/Flutter/ephemeral/
+**/macos/Runner.xcworkspace/xcuserdata/
+
+# Coverage reports
+coverage/
+
+# Exceptions to the above rules.
+!**/android/gradlew-wrapper.jar
+!**/ios/Runner/Info.plist
+!**/ios/Runner.xcodeproj/project.pbxproj
+!**/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+!**/ios/Flutter/AppFrameworkInfo.plist
+!**/ios/Flutter/Debug.xcconfig
+!**/ios/Flutter/Release.xcconfig
