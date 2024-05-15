@@ -31,8 +31,12 @@ Future<bool> checkLocationService() async {
   return true;
 }
 
+Position? position;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await checkLocationService();
+  position = await Geolocator.getCurrentPosition();
   runApp(MyApp());
 }
 
@@ -52,42 +56,19 @@ class WebViewExample extends StatefulWidget {
 
 class _WebViewExampleState extends State<WebViewExample> {
   var webviewController = WebViewController();
-  late Timer _timer;
-  bool isFirstLoad = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkLocationService();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     webviewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(NavigationDelegate(onPageFinished: (url) async {
-
-        Position position = await Geolocator.getCurrentPosition();
-        print("position: ${position.latitude}, ${position.longitude}");
-        webviewController.runJavaScript(
-            'flutterLocation(${position.latitude},${position.longitude})');
-
-        Timer.periodic(const Duration(minutes: 1), (timer) async {
-          Position position = await Geolocator.getCurrentPosition();
-          print("position: ${position.latitude}, ${position.longitude}");
-          webviewController.runJavaScript(
-              'flutterLocation(${position.latitude},${position.longitude})');
-        });
-
-      }))
-      ..loadRequest(Uri.parse('https://remomory.shop'));
+      // ..loadRequest(Uri.parse('http://172.30.1.19:3000?latitude=${position?.latitude}&longitude=${position?.longitude}'));
+      ..loadRequest(Uri.parse('https://remomory.shop?latitude=${position?.latitude}&longitude=${position?.longitude}'));
 
     return SafeArea(child: WebViewWidget(controller: webviewController));
   }
