@@ -1,9 +1,38 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-// import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-void main() {
+Future<bool> checkLocationService() async {
+  Location location = Location();
+  bool serviceEnabled;
+  PermissionStatus permissionGranted;
+
+  // 위치 서비스 활성화 확인 및 요청
+  serviceEnabled = await location.serviceEnabled();
+  if (!serviceEnabled) {
+    serviceEnabled = await location.requestService();
+    if (!serviceEnabled) {
+      return false;
+    }
+  }
+
+  // 위치 권한 확인 및 요청
+  permissionGranted = await location.hasPermission();
+  if (permissionGranted == PermissionStatus.denied) {
+    permissionGranted = await location.requestPermission();
+    if (permissionGranted != PermissionStatus.granted) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -22,26 +51,43 @@ class WebViewExample extends StatefulWidget {
 }
 
 class _WebViewExampleState extends State<WebViewExample> {
-  bool _isFirstLoad = true;
+  var webviewController = WebViewController();
+  late Timer _timer;
+  bool isFirstLoad = true;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkLocationService();
+  }
 
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var webviewController = WebViewController();
     webviewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageFinished: (_) {
-            if(_isFirstLoad){
-              webviewController.runJavaScript('flutterLocation(1,3)');
-              _isFirstLoad = false;
-            }
-          }
-        )
-      )
-      ..loadRequest(Uri.parse('http://172.30.1.19:3000'));
+      ..setNavigationDelegate(NavigationDelegate(onPageFinished: (url) async {
+
+        Position position = await Geolocator.getCurrentPosition();
+        print("position: ${position.latitude}, ${position.longitude}");
+        webviewController.runJavaScript(
+            'flutterLocation(${position.latitude},${position.longitude})');
+
+        Timer.periodic(const Duration(minutes: 1), (timer) async {
+          Position position = await Geolocator.getCurrentPosition();
+          print("position: ${position.latitude}, ${position.longitude}");
+          webviewController.runJavaScript(
+              'flutterLocation(${position.latitude},${position.longitude})');
+        });
+
+      }))
+      ..loadRequest(Uri.parse('https://remomory.shop'));
 
     return SafeArea(child: WebViewWidget(controller: webviewController));
   }
